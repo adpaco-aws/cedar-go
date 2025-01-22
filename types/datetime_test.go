@@ -42,6 +42,30 @@ func TestDatetime(t *testing.T) {
 			{"1970-01-01T00:10:00-0010", "1970-01-01T00:00:00.000Z"},
 			{"1970-01-01T01:00:00-0100", "1970-01-01T00:00:00.000Z"},
 			{"1970-01-01T10:00:00-1000", "1970-01-01T00:00:00.000Z"},
+
+			// Tests for some corner cases in datetime formats.
+			// Value ranges taken from the ISO 8601 datetime format:
+			//  - https://en.wikipedia.org/wiki/ISO_8601
+			//  - https://en.wikipedia.org/wiki/List_of_UTC_offsets
+			//
+			// 1. the last leap second - test passes
+			{"2016-12-31T23:59:60Z", "2017-01-01T00:00:00.000Z"},
+			// 2. an "invalid" leap second - test passes
+			{"2017-06-30T23:59:60Z", "2017-07-01T00:00:00.000Z"},
+			// 3. an invalid minute - test passes
+			{"2017-06-30T23:60:00Z", "2017-07-01T00:00:00.000Z"},
+			// 4. the CET timezone offset (UTC+01:00) - test passes
+			{"2016-12-31T00:00:00+0100", "2016-12-31T01:00:00.000Z"},
+			// 5. a negative zero timezone offset (not permitted) - test passes
+			{"2016-12-31T00:00:00-0000", "2016-12-31T00:00:00.000Z"},
+			// 6. a general timezone offset - test passes
+			{"2016-12-31T00:00:00+1159", "2016-12-31T11:59:00.000Z"},
+			// 7. a general timezone offset - test passes
+			{"2016-12-31T00:00:00+1500", "2016-12-31T15:00:00.000Z"},
+			// 8. a general timezone offset with a "leap minute" - test passes
+			{"2016-12-31T00:00:00+2360", "2017-01-01T00:00:00.000Z"},
+			// 9. a general timezone offset with out-of-range values - test passes
+			{"2016-12-31T00:00:00+2490", "2017-01-01T01:30:00.000Z"},
 		}
 		for ti, tt := range tests {
 			tt := tt
