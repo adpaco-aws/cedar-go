@@ -66,6 +66,10 @@ func TestDatetime(t *testing.T) {
 			{"2016-12-31T00:00:00+2360", "2017-01-01T00:00:00.000Z"},
 			// 9. a general timezone offset with out-of-range values - test passes
 			{"2016-12-31T00:00:00+2490", "2017-01-01T01:30:00.000Z"},
+			// 10. a valid date since 2024 is a leap year - test passes
+			{"2024-02-29", "2024-02-29T00:00:00.000Z"},
+			// 11. an invalid date (ranges are valid) - test passes
+			{"2025-02-31", "2025-03-03T00:00:00.000Z"},
 		}
 		for ti, tt := range tests {
 			tt := tt
